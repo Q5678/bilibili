@@ -22,8 +22,6 @@
 # ～ BiliBili_嗶哩嗶哩_繁體CC字幕轉中文簡體@ddgksf2013
 ^https?:\/\/i.\.hdslb\.com\/bfs\/subtitle\/.+\.json$ url script-response-body https://raw.githubusercontent.com/ddgksf2013/Cuttlefish/master/Script/bilibili_cc.js
 
-# ～ BiliBili_嗶哩嗶哩_解除SIM卡地區限制
-(^https?:\/\/app\.biliintl.com\/intl\/.+)(&sim_code=\d+)(.+) url 302 $1$3
 
 bilibili-json = type=http-response,pattern=^https:\/\/app\.bilibili\.com\/x\/(v2\/(splash\/(list|show)|feed\/index\?)|resource\/show\/tab\/v2),requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/iEwha/Profiles/master/Script/bilibili-json.js,script-update-interval=0
 
