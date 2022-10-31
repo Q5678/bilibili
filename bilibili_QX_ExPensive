@@ -3,16 +3,20 @@
 
 [Script]
 # > 去广告
-标签页处理 = type=http-response,pattern=^https?:\/\/app\.bilibili\.com\/x\/resource\/show\/tab,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/ddgksf2013/Cuttlefish/master/Script/bilibili_diy.js,script-update-interval=0
+# ～ BiliBili_哔哩哔哩_标签页处理@ddgksf2013
+^https?:\/\/app\.bilibili\.com\/x\/resource\/show\/tab url script-response-body https://gitlab.com/ddgksf2013/Cuttlefish/-/raw/master/Script/bilibili_json.js
 
-追番去广告 = type=http-response,pattern=^https?:\/\/api\.bilibili\.com\/pgc\/page\/bangumi,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/ddgksf2013/Cuttlefish/master/Script/bilibili_diy.js,script-update-interval=0
+# ～ BiliBili_哔哩哔哩_追番去广告@ddgksf2013
+^https?:\/\/api\.(bilibili|biliapi)\.(com|net)\/pgc\/page\/bangumi url script-response-body https://gitlab.com/ddgksf2013/Cuttlefish/-/raw/master/Script/bilibili_json.js
 
-推荐去广告 = type=http-response,pattern=^https?:\/\/app\.bilibili\.com\/x\/v2\/feed\/index,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/ddgksf2013/Cuttlefish/master/Script/bilibili_diy.js,script-update-interval=0
+# ～ BiliBili_哔哩哔哩_推荐去广告@ddgksf2013
+^https?:\/\/app\.bilibili\.com\/x\/v2\/feed\/index url script-response-body https://gitlab.com/ddgksf2013/Cuttlefish/-/raw/master/Script/bilibili_json.js
 
-动态去广告 = type=http-response,pattern=^https?:\/\/api\.vc\.bilibili\.com\/dynamic_svr\/v1\/dynamic_svr\/dynamic_(history|new)\?,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/ddgksf2013/Cuttlefish/master/Script/bilibili_diy.js,script-update-interval=0
+# ～ BiliBili_哔哩哔哩_去除动态中的话题@bm7
+^https?:\/\/api\.vc\.bilibili\.com\/topic_svr\/v1\/topic_svr url reject-dict
 
-直播去广告 = type=http-response,pattern=^https?:\/\/api\.live\.bilibili\.com\/xlive\/app-room\/v1\/index\/getInfoByRoom,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/ddgksf2013/Cuttlefish/master/Script/bilibili_diy.js,script-update-interval=0
-
+# ～ BiliBili_哔哩哔哩_直播去广告@bm7
+^https?:\/\/api\.live\.bilibili\.com\/xlive\/app-room\/v1\/index\/getInfoByRoom url script-response-body https://gitlab.com/ddgksf2013/Cuttlefish/-/raw/master/Script/bilibili_json.js
 # ～ BiliBili_哔哩哔哩_1080P高码率+4K画质(番剧和影视除外)@ddgksf2013
 ^https?:\/\/app\.bilibili\.com\/x\/v2\/account\/myinfo\? url script-response-body https://gitlab.com/ddgksf2013/Cuttlefish/-/raw/master/Script/bilibili_json.js
 
