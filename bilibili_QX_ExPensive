@@ -13,15 +13,14 @@
 
 直播去广告 = type=http-response,pattern=^https?:\/\/api\.live\.bilibili\.com\/xlive\/app-room\/v1\/index\/getInfoByRoom,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/ddgksf2013/Cuttlefish/master/Script/bilibili_diy.js,script-update-interval=0
 
-# ～ BiliBili_嗶哩嗶哩_1080P高码率+4K畫質(番劇和影視除外)@ddgksf2013
-^https?:\/\/app\.bilibili\.com\/x\/v2\/account\/myinfo\? url script-response-body https://raw.githubusercontent.com/ddgksf2013/Cuttlefish/master/Script/bilibili_diy.js
+# ～ BiliBili_哔哩哔哩_1080P高码率+4K画质(番剧和影视除外)@ddgksf2013
+^https?:\/\/app\.bilibili\.com\/x\/v2\/account\/myinfo\? url script-response-body https://gitlab.com/ddgksf2013/Cuttlefish/-/raw/master/Script/bilibili_json.js
 
 # > BiliBili_我的页面处理
 ^https://app\.bilibili\.com/x/v2/account/mine\?access_key url script-response-body https://raw.githubusercontent.com/yjqiang/surge_scripts/main/scripts/bilibili/bilibili_mine.js
 
-# ～ BiliBili_嗶哩嗶哩_繁體CC字幕轉中文簡體@ddgksf2013
-^https?:\/\/i.\.hdslb\.com\/bfs\/subtitle\/.+\.json$ url script-response-body https://raw.githubusercontent.com/ddgksf2013/Cuttlefish/master/Script/bilibili_cc.js
-
+# ～ BiliBili_哔哩哔哩_繁体CC字幕转中文简体[自行启用]@ddgksf2013
+^https?:\/\/i.\.hdslb\.com\/bfs\/subtitle\/.+\.json$ url script-response-body https://gitlab.com/ddgksf2013/Cuttlefish/-/raw/master/Script/bilibili_cc.js
 
 bilibili-json = type=http-response,pattern=^https:\/\/app\.bilibili\.com\/x\/(v2\/(splash\/(list|show)|feed\/index\?)|resource\/show\/tab\/v2),requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/iEwha/Profiles/master/Script/bilibili-json.js,script-update-interval=0
 
