@@ -1,43 +1,40 @@
-#!name= Bilibili换区&去广告(iOS15)   。陈゛♥️₊
-#!desc=开屏页广告,推荐页广告,动态(推荐话题和列表广告),视频播放页面(up主推荐广告,相关推荐广告)
+#!name=Bilibili
+#!desc=Bilibili app removes ads.
+#!system=ios
+
+[Rule]
+// defaultword 搜索框默认填充；square 热搜
+// URL-REGEX,https://app.bilibili.com/x/v2/search/(defaultword|square),REJECT
+
+// 搭配 protobuf 的（否则抓不到。。。）
+// REJECT-NO-DROP 表示不使用默认的自动丢包逻辑，这样 Surge 每次都会返回 ICMP Port Unreachable，应用会立刻回退而不是等超时。
+DOMAIN-SUFFIX, grpc.biliapi.net, REJECT-NO-DROP
 
 [Script]
-# > 去广告
-# ～ BiliBili_哔哩哔哩_标签页处理@ddgksf2013
-^https?:\/\/app\.bilibili\.com\/x\/resource\/show\/tab url script-response-body https://gitlab.com/ddgksf2013/Cuttlefish/-/raw/master/Script/bilibili_json.js
+BiliBili_标签页处理 = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/app\.bilibili\.com\/x\/resource\/show\/tab,script-path=https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/script/bilibili/bilibili_plus.js
 
-# ～ BiliBili_哔哩哔哩_追番去广告@ddgksf2013
-^https?:\/\/api\.(bilibili|biliapi)\.(com|net)\/pgc\/page\/bangumi url script-response-body https://gitlab.com/ddgksf2013/Cuttlefish/-/raw/master/Script/bilibili_json.js
-
-# ～ BiliBili_哔哩哔哩_推荐去广告@ddgksf2013
-^https?:\/\/app\.bilibili\.com\/x\/v2\/feed\/index url script-response-body https://gitlab.com/ddgksf2013/Cuttlefish/-/raw/master/Script/bilibili_json.js
-
-# ～ BiliBili_哔哩哔哩_去除动态中的话题@bm7
-^https?:\/\/api\.vc\.bilibili\.com\/topic_svr\/v1\/topic_svr url reject-dict
-
-# ～ BiliBili_哔哩哔哩_直播去广告@bm7
-^https?:\/\/api\.live\.bilibili\.com\/xlive\/app-room\/v1\/index\/getInfoByRoom url script-response-body https://gitlab.com/ddgksf2013/Cuttlefish/-/raw/master/Script/bilibili_json.js
-# ～ BiliBili_哔哩哔哩_1080P高码率+4K画质(番剧和影视除外)@ddgksf2013
-^https?:\/\/app\.bilibili\.com\/x\/v2\/account\/myinfo\? url script-response-body https://gitlab.com/ddgksf2013/Cuttlefish/-/raw/master/Script/bilibili_json.js
-
-# ～ BiliBili_哔哩哔哩_我的页面处理@ddgksf2013
-^https?:\/\/app\.bilibili\.com\/x\/v2\/account\/mine url script-response-body https://gitlab.com/ddgksf2013/Cuttlefish/-/raw/master/Script/bilibili_json.js
-
-# ～ BiliBili_哔哩哔哩_繁体CC字幕转中文简体[自行启用]@ddgksf2013
-^https?:\/\/i.\.hdslb\.com\/bfs\/subtitle\/.+\.json$ url script-response-body https://gitlab.com/ddgksf2013/Cuttlefish/-/raw/master/Script/bilibili_cc.js
-
-bilibili-json = type=http-response,pattern=^https:\/\/app\.bilibili\.com\/x\/(v2\/(splash\/(list|show)|feed\/index\?)|resource\/show\/tab\/v2),requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/iEwha/Profiles/master/Script/bilibili-json.js,script-update-interval=0
-
-bilibili-proto = type=http-response,pattern=^https:\/\/app\.bilibili\.com\/bilibili\.app\.(view\.v1\.View\/View|dynamic\.v2\.Dynamic\/DynAll)$,requires-body=1,binary-body-mode=1,max-size=0,script-path=https://raw.githubusercontent.com/iEwha/Profiles/master/Script/bilibili-proto.js,script-update-interval=0
+// “首页”的推荐 https://app.bilibili.com/x/v2/feed/index?
+// 短视频的推荐 https://app.bilibili.com/x/v2/feed/index/story?
+http-response ^https://app\.bilibili\.com/x/v2/feed/index(/story)?\?access_key requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/yjqiang/surge_scripts/main/scripts/bilibili/bilibili_feed.js
 
 
+// 短视频的推荐 https://app.biliapi.net/x/v2/feed/index/story?
+http-response ^https://app\.biliapi\.net/x/v2/feed/index/story\?access_key requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/yjqiang/surge_scripts/main/scripts/bilibili/bilibili_feed.js
 
-# > Policy自动切换
-^https:\/\/ap(p|i)\.bili(bili|api)\.(com|net)\/(pgc\/view\/v\d\/app\/season|x\/v\d\/search\/defaultwords)\?access_key url script-response-body https://raw.githubusercontent.com/NobyDa/Script/master/Surge/JS/Bili_Auto_Regions.js
+// “我的”的修改
+http-response ^https://app\.bilibili\.com/x/v2/account/mine\?access_key requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/yjqiang/surge_scripts/main/scripts/bilibili/bilibili_mine.js
 
-#可选, 适用于搜索指定地区的番剧
-^https:\/\/ap(p|i)\.bili(bili|api)\.(com|net)\/x\/v\d\/search(\/type)?\?.+?%20(%E6%B8%AF|%E5%8F%B0|%E4%B8%AD)& url script-request-header https://raw.githubusercontent.com/NobyDa/Script/master/Surge/JS/Bili_Auto_Regions.js
+// http-response ^https://api\.bilibili\.com/x/v2/reply/main 在 app 改为了 https://app.bilibili.com/bilibili.main.community.reply.v1.Reply/MainList 评论区
 
+// 动态广告
+http-response ^https://app\.bilibili\.com/bilibili\.app\.dynamic\.v2\.Dynamic/DynAll$ requires-body=1,binary-body-mode=1,max-size=0,script-path=https://raw.githubusercontent.com/yjqiang/surge_scripts/main/scripts/bilibili/bilibili_dynamic.js
+
+// 播放器广告
+http-response ^https://app\.bilibili\.com/bilibili\.app\.view\.v1\.View/View$ requires-body=1,binary-body-mode=1,max-size=0,script-path=https://raw.githubusercontent.com/yjqiang/surge_scripts/main/scripts/bilibili/bilibili_view.js
+
+// 开屏广告（预加载）
+// https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/script/bilibili/bilibili_plus.js
+http-response ^https://app\.bilibili\.com/x/v2/splash/list requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/yjqiang/surge_scripts/main/scripts/bilibili/bilibili_splash.js
 
 [MITM]
-hostname = %APPEND% app.bilibili.com, grpc.biliapi.net, ap?.bilibili.com, ap?.biliapi.net, api.live.bilibili.com, api.vc.bilibili.com, manga.bilibili.com, *.hdslb.com
+hostname = %APPEND% app.bilibili.com, app.biliapi.net
