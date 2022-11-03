@@ -4,10 +4,8 @@
 # h2下走grpc.biliapi.net(Surge TF2332以上版本可正常解析) h1时走app.bilibili.com
 
 [MITM]
-hostname = %APPEND% app.bilibili.com, grpc.biliapi.net
+hostname = app.bilibili.com, grpc.biliapi.net
 
 [Script]
-bili-json = type=http-response,pattern=^https:\/\/app\.bilibili\.com\/x\/(v2\/(splash\/(list|show)|feed\/index\?)|resource\/show\/tab\/v2),requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/app2smile/rules/master/js/bilibili-json.js,script-update-interval=0
-bili-proto = type=http-response,pattern=^https:\/\/(grpc\.biliapi\.net|app\.bilibili\.com)\/bilibili\.app\.(view\.v1\.View\/View|dynamic\.v2\.Dynamic\/DynAll|playurl\.v1\.PlayURL\/PlayView)$,requires-body=1,binary-body-mode=1,max-size=0,script-path=https://raw.githubusercontent.com/app2smile/rules/master/js/bilibili-proto.js,script-update-interval=0
 BiliBili_我的页面处理 = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/app\.bilibili\.com\/x\/v2\/account\/mine,script-path=https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/script/bilibili/bilibili_plus.js
 BiliBili_HD = type=http-response,pattern=https:\/\/ap(p|i)\.bilibili\.com\/((pgc\/player\/api\/playurl)|(x\/v2\/account\/myinfo\?)|(x\/v2\/account/mine\?)),requires-body=true,script-path=https://github.com/Sunert/Script/raw/master/Script/Bilibili/BiliHD.js
